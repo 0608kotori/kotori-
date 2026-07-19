@@ -61,7 +61,9 @@
   build fails without it. The verified 82-file manual-upload subset lives at
   `../github-upload-ready`, excludes internal notes, tests, frame-generation
   tooling, unused member contact sheets, and the unused `moc.png`, and passes a
-  clean production build. No remote push or deployment has occurred yet.
+  clean production build. The initial website upload was pushed to
+  `origin/main` at commit `1dfa258` on 2026-07-20. Deployment has not been
+  performed.
 - Navigation and project cleanup (2026-07-19): initial and refreshed hash URLs
   now realign after layout and ScrollTrigger refresh, including `#members` on
   desktop and mobile. Remove the unused D1/Drizzle starter scaffold and keep a
