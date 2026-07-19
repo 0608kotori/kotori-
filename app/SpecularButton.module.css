@@ -1,0 +1,200 @@
+.root {
+  --specular-x: 50%;
+  --specular-y: 50%;
+  --specular-strength: 0;
+  position: relative;
+  display: inline-grid;
+  overflow: hidden;
+  align-items: center;
+  border: var(--specular-thickness) solid
+    color-mix(in srgb, var(--specular-line) 22%, transparent);
+  border-radius: var(--specular-radius);
+  appearance: none;
+  background: var(--specular-base);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.11),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.2),
+    0 16px 48px rgba(0, 0, 0, 0.24);
+  color: var(--specular-text);
+  cursor: pointer;
+  isolation: isolate;
+  text-decoration: none;
+  transition:
+    border-color var(--specular-speed) ease,
+    box-shadow var(--specular-speed) ease,
+    transform var(--specular-speed) ease;
+}
+
+.root::after {
+  position: absolute;
+  z-index: 3;
+  inset: calc(var(--specular-thickness) * -1);
+  padding: var(--specular-thickness);
+  border-radius: inherit;
+  background: radial-gradient(
+    circle var(--specular-shine-end) at var(--specular-x) var(--specular-y),
+    var(--specular-line) 0,
+    transparent 100%
+  );
+  content: "";
+  opacity: var(--specular-strength);
+  pointer-events: none;
+  transition: opacity var(--specular-speed) ease;
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
+.surface,
+.shine,
+.content {
+  grid-area: 1 / 1;
+}
+
+.surface {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.1), transparent 54%),
+    color-mix(
+      in srgb,
+      var(--specular-tint) var(--specular-tint-opacity),
+      transparent
+    );
+  pointer-events: none;
+}
+
+.shine {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  background: radial-gradient(
+    circle at var(--specular-x) var(--specular-y),
+    color-mix(
+        in srgb,
+        var(--specular-line) var(--specular-highlight),
+        transparent
+      )
+      0 var(--specular-shine-size),
+    transparent var(--specular-shine-end)
+  );
+  filter: blur(var(--specular-blur));
+  opacity: var(--specular-strength);
+  pointer-events: none;
+  transition: opacity var(--specular-speed) ease;
+}
+
+.content {
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 620;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+.root[data-size="sm"] .content {
+  min-height: 40px;
+  padding: 0 16px;
+  font-size: 12px;
+}
+
+.root[data-size="md"] .content {
+  min-height: 48px;
+  padding: 0 20px;
+  font-size: 13px;
+}
+
+.root[data-size="lg"] .content {
+  min-height: 54px;
+  padding: 0 24px;
+  gap: 16px;
+  font-size: 14px;
+}
+
+.root:hover,
+.root[data-active="true"] {
+  border-color: color-mix(in srgb, var(--specular-line) 38%, transparent);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.2),
+    0 18px 56px rgba(0, 0, 0, 0.3);
+  transform: translateY(-1px);
+}
+
+.root[data-auto-animate="true"][data-motion="enabled"] .shine {
+  background: linear-gradient(
+    112deg,
+    transparent 20%,
+    color-mix(
+        in srgb,
+        var(--specular-line) var(--specular-highlight),
+        transparent
+      )
+      48%,
+    transparent 72%
+  );
+  background-position: 120% 0;
+  background-size: 240% 100%;
+  opacity: 0.5;
+  animation: specular-auto-sweep var(--specular-auto-speed) ease-in-out infinite;
+}
+
+@keyframes specular-auto-sweep {
+  0%,
+  24% {
+    background-position: 120% 0;
+  }
+
+  70%,
+  100% {
+    background-position: -120% 0;
+  }
+}
+
+@media (max-width: 680px) {
+  .root[data-size="lg"] {
+    width: min(100%, 300px);
+  }
+
+  .root[data-size="lg"] .content {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce), (pointer: coarse) {
+  .root,
+  .shine,
+  .root::after {
+    transition: none;
+  }
+
+  .root:hover,
+  .root[data-active="true"] {
+    transform: none;
+  }
+
+  .root[data-auto-animate="true"] .shine {
+    animation: none;
+    opacity: 0;
+  }
+}
+
+@media (prefers-contrast: more) {
+  .root {
+    border-color: #ffffff;
+    background: #202020;
+    box-shadow: none;
+  }
+
+  .surface,
+  .shine,
+  .root::after {
+    display: none;
+  }
+}

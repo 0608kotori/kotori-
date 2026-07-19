@@ -1,0 +1,244 @@
+.root {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: clamp(24px, 4vw, 38px);
+  background: rgba(9, 9, 15, 0.64);
+  isolation: isolate;
+}
+
+.track {
+  position: relative;
+  min-height: var(--orbit-stage-height);
+  transform: rotate(var(--orbit-rotation));
+}
+
+.fill {
+  position: absolute;
+  z-index: -1;
+  top: 50%;
+  left: 50%;
+  width: calc(var(--orbit-radius-x) * 2.2);
+  height: calc(var(--orbit-radius-y) * 2.8);
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse,
+    rgba(85, 96, 221, 0.13),
+    rgba(227, 141, 179, 0.045) 46%,
+    transparent 74%
+  );
+  filter: blur(18px);
+  transform: translate(-50%, -50%);
+}
+
+.path {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: calc(var(--orbit-radius-x) * 2);
+  height: calc(var(--orbit-radius-y) * 2);
+  border: 1px solid rgba(184, 180, 255, 0.24);
+  border-radius: 50%;
+  box-shadow: 0 0 26px rgba(85, 96, 221, 0.06);
+  transform: translate(-50%, -50%);
+}
+
+.legend {
+  display: flex;
+  min-height: 54px;
+  padding: 14px 20px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  border-top: 1px solid var(--line);
+}
+
+.legend strong {
+  color: var(--foreground);
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  font-weight: 650;
+  letter-spacing: 0.12em;
+}
+
+.legend span {
+  color: var(--foreground-soft);
+  font-size: 0.62rem;
+  font-weight: 670;
+  letter-spacing: 0.14em;
+  text-align: right;
+}
+
+.list {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: calc(var(--orbit-item-size) * 1.62);
+  offset-path: ellipse(
+    var(--orbit-radius-x) var(--orbit-radius-y) at 50% 50%
+  );
+  offset-rotate: 0deg;
+  animation: orbit var(--orbit-duration) linear infinite;
+}
+
+.root[data-active="false"] .item,
+.root:hover .item,
+.root:focus-within .item {
+  animation-play-state: paused;
+}
+
+.card {
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 16px;
+  background: #f4f4f6;
+  box-shadow:
+    0 18px 50px rgba(0, 0, 0, 0.38),
+    0 0 24px rgba(85, 96, 221, 0.08);
+  transform: rotate(calc(var(--orbit-rotation) * -1));
+  transition:
+    box-shadow 220ms ease,
+    transform 220ms ease;
+}
+
+.item:hover,
+.item:focus-within {
+  z-index: 3;
+}
+
+.item:hover .card,
+.item:focus-within .card {
+  box-shadow:
+    0 24px 64px rgba(0, 0, 0, 0.46),
+    0 0 30px rgba(85, 96, 221, 0.12);
+  transform: rotate(calc(var(--orbit-rotation) * -1)) scale(1.035);
+}
+
+.imageFrame {
+  aspect-ratio: 1.62 / 1;
+  overflow: hidden;
+  background: #f4f4f6;
+}
+
+.imageFrame img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+}
+
+.card figcaption {
+  display: -webkit-box;
+  min-height: 42px;
+  overflow: hidden;
+  padding: 8px 11px;
+  border-top: 1px solid rgba(8, 8, 13, 0.1);
+  color: rgba(8, 8, 13, 0.62);
+  font-size: 0.56rem;
+  font-weight: 680;
+  letter-spacing: 0.08em;
+  line-height: 1.45;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+@keyframes orbit {
+  from {
+    offset-distance: 0%;
+  }
+  to {
+    offset-distance: 100%;
+  }
+}
+
+@media (max-width: 680px) {
+  .root {
+    min-height: 0;
+    overflow: visible;
+    border-right: 0;
+    border-left: 0;
+    border-radius: 0;
+    background: transparent;
+  }
+
+  .track {
+    min-height: 0;
+    transform: none;
+  }
+
+  .fill,
+  .path,
+  .legend {
+    display: none;
+  }
+
+  .list {
+    position: relative;
+    display: flex;
+    padding: 18px 9vw 22px 0;
+    gap: 14px;
+    overflow-x: auto;
+    scroll-padding-left: 0;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+
+  .list::-webkit-scrollbar {
+    display: none;
+  }
+
+  .item {
+    position: relative;
+    top: auto;
+    left: auto;
+    width: min(82vw, 330px);
+    flex: 0 0 min(82vw, 330px);
+    offset-path: none;
+    animation: none;
+    scroll-snap-align: start;
+  }
+
+  .card {
+    border-radius: 18px;
+    transform: none;
+  }
+
+  .card figcaption {
+    min-height: 48px;
+    padding: 12px 14px;
+    font-size: 0.62rem;
+  }
+
+  .item:hover .card,
+  .item:focus-within .card {
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .item {
+    animation-play-state: paused;
+  }
+}
+
+@media (prefers-contrast: more) {
+  .root,
+  .card,
+  .path {
+    border-color: currentColor;
+  }
+
+  .fill {
+    display: none;
+  }
+}

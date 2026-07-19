@@ -1,0 +1,136 @@
+.root {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  contain: paint;
+}
+
+.fallback,
+.canvasHost,
+.scrim {
+  position: absolute;
+  inset: 0;
+}
+
+.fallback {
+  inset: -8%;
+  opacity: 0.52;
+  transform: translate3d(
+    calc(var(--pointer-x) * -12px),
+    calc(var(--pointer-y) * -12px),
+    0
+  );
+  transition:
+    opacity 800ms ease,
+    transform 900ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.fallbackOne {
+  background-image:
+    radial-gradient(circle at 7% 18%, rgba(255, 255, 255, 0.75) 0 1px, transparent 1.5px),
+    radial-gradient(circle at 18% 71%, rgba(255, 255, 255, 0.45) 0 1px, transparent 1.5px),
+    radial-gradient(circle at 31% 27%, rgba(123, 200, 255, 0.6) 0 1px, transparent 1.5px),
+    radial-gradient(circle at 43% 82%, rgba(255, 255, 255, 0.4) 0 1px, transparent 1.5px),
+    radial-gradient(circle at 59% 13%, rgba(169, 153, 255, 0.7) 0 1px, transparent 1.5px),
+    radial-gradient(circle at 66% 64%, rgba(255, 255, 255, 0.5) 0 1px, transparent 1.5px),
+    radial-gradient(circle at 77% 33%, rgba(255, 255, 255, 0.65) 0 1px, transparent 1.5px),
+    radial-gradient(circle at 92% 76%, rgba(130, 232, 207, 0.52) 0 1px, transparent 1.5px);
+  background-size: 360px 360px;
+  animation: fallback-drift 28s linear infinite alternate;
+}
+
+.fallbackTwo {
+  inset: -15%;
+  opacity: 0.27;
+  background-image:
+    radial-gradient(circle at 12% 42%, #fff 0 0.8px, transparent 1.2px),
+    radial-gradient(circle at 37% 61%, #fff 0 0.8px, transparent 1.2px),
+    radial-gradient(circle at 61% 29%, #fff 0 0.8px, transparent 1.2px),
+    radial-gradient(circle at 86% 58%, #fff 0 0.8px, transparent 1.2px);
+  background-size: 220px 220px;
+  transform: translate3d(
+    calc(var(--pointer-x) * 18px),
+    calc(var(--pointer-y) * 18px),
+    0
+  );
+  animation: fallback-drift-reverse 34s linear infinite alternate;
+}
+
+.canvasHost {
+  opacity: 0;
+  transition: opacity 900ms ease;
+}
+
+.canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.root[data-ready="true"] .canvasHost {
+  opacity: 0.84;
+}
+
+.root[data-ready="true"] .fallback {
+  opacity: 0;
+  animation-play-state: paused;
+}
+
+.scrim {
+  background:
+    radial-gradient(
+      ellipse at 50% 48%,
+      rgba(5, 5, 10, 0.34) 0%,
+      rgba(5, 5, 10, 0.18) 38%,
+      transparent 72%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(5, 5, 10, 0.16),
+      transparent 30%,
+      rgba(5, 5, 10, 0.3)
+    );
+}
+
+@keyframes fallback-drift {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 34px 18px;
+  }
+}
+
+@keyframes fallback-drift-reverse {
+  from {
+    background-position: 20px 10px;
+  }
+  to {
+    background-position: 0 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce), (pointer: coarse) {
+  .fallback {
+    animation: none;
+    transform: none;
+  }
+
+  .canvasHost {
+    display: none;
+  }
+}
+
+@media (prefers-contrast: more) {
+  .fallback {
+    opacity: 0.32;
+    animation: none;
+    transform: none;
+  }
+
+  .canvasHost {
+    display: none;
+  }
+}

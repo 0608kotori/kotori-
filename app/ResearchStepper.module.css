@@ -1,0 +1,252 @@
+.stepper {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  list-style: none;
+}
+
+.step {
+  position: relative;
+  min-width: 0;
+}
+
+.rail {
+  display: flex;
+  height: 48px;
+  align-items: center;
+}
+
+.marker {
+  display: grid;
+  width: 40px;
+  height: 40px;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 50%;
+  background: #0b0b13;
+  color: #7f7f8d;
+  transition:
+    border-color 220ms ease,
+    background-color 220ms ease,
+    box-shadow 220ms ease,
+    color 220ms ease;
+}
+
+.stepNumber {
+  font-size: 10px;
+  font-weight: 680;
+  letter-spacing: 0.08em;
+}
+
+.activeDot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 0 16px rgba(255, 255, 255, 0.34);
+}
+
+.checkMark {
+  color: #05050a;
+  font-size: 15px;
+  font-weight: 760;
+  line-height: 1;
+}
+
+.connector {
+  position: relative;
+  height: 2px;
+  flex: 1;
+  margin: 0 8px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.connectorFill {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  background: #b8b4ff;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 400ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.content {
+  min-height: 282px;
+  margin: 16px 14px 0 0;
+  padding: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 20px;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.025), transparent 44%),
+    rgba(11, 11, 19, 0.86);
+  transition:
+    border-color 220ms ease,
+    background-color 220ms ease;
+}
+
+.meta {
+  display: flex;
+  margin-bottom: 42px;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.label {
+  display: flex;
+  margin: 0;
+  flex-direction: column;
+  gap: 5px;
+  color: #aaa6b8;
+  font-size: 10px;
+  font-weight: 680;
+  letter-spacing: 0.12em;
+}
+
+.label span {
+  color: #7f7f8d;
+  font-weight: 520;
+  letter-spacing: 0.06em;
+}
+
+.stateLabel {
+  display: inline-flex;
+  min-height: 24px;
+  padding: 0 9px;
+  align-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  color: #7f7f8d;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.content h4 {
+  margin: 0;
+  color: #f5f4f8;
+  font-size: clamp(1.45rem, 2.2vw, 2rem);
+  font-weight: 580;
+  letter-spacing: -0.025em;
+  line-height: 1.08;
+}
+
+.titleZh {
+  margin: 8px 0 20px;
+  color: #aaa6b8;
+  font-size: 0.92rem;
+  font-weight: 540;
+}
+
+.content > p:not(.titleZh) {
+  margin: 0;
+  color: #aaa6b8;
+  font-size: 0.9rem;
+  line-height: 1.62;
+}
+
+.step[data-state="current"] .marker {
+  border-color: rgba(184, 180, 255, 0.48);
+  background: #5560dd;
+  box-shadow: 0 0 22px rgba(85, 96, 221, 0.24);
+  color: #ffffff;
+}
+
+.step[data-state="current"] .stateLabel {
+  border-color: rgba(184, 180, 255, 0.3);
+  background: rgba(85, 96, 221, 0.12);
+  color: #d8d5ff;
+}
+
+.step[data-state="current"] .content {
+  border-color: rgba(184, 180, 255, 0.24);
+  background:
+    radial-gradient(circle at 12% 0%, rgba(85, 96, 221, 0.1), transparent 46%),
+    rgba(11, 11, 19, 0.92);
+}
+
+.step[data-state="complete"] .marker {
+  border-color: rgba(184, 180, 255, 0.4);
+  background-color: #b8b4ff;
+  color: #05050a;
+}
+
+.step[data-state="complete"] .connectorFill {
+  transform: scaleX(1);
+}
+
+.step[data-state="complete"] .stateLabel {
+  color: #aaa6b8;
+}
+
+@media (max-width: 760px) {
+  .stepper {
+    grid-template-columns: 1fr;
+  }
+
+  .step {
+    display: grid;
+    grid-template-columns: 48px minmax(0, 1fr);
+  }
+
+  .rail {
+    height: 100%;
+    flex-direction: column;
+  }
+
+  .connector {
+    width: 2px;
+    height: calc(100% - 40px);
+    flex: 1;
+    margin: 8px 0 0;
+  }
+
+  .connectorFill {
+    transform: scaleY(0);
+    transform-origin: top;
+  }
+
+  .step[data-state="complete"] .connectorFill {
+    transform: scaleY(1);
+  }
+
+  .content {
+    min-height: 0;
+    margin: 0 0 16px;
+    padding: 24px;
+  }
+
+  .step:last-child .content {
+    margin-bottom: 0;
+  }
+
+  .meta {
+    margin-bottom: 30px;
+  }
+}
+
+@media (prefers-contrast: more) {
+  .marker,
+  .content {
+    border-color: currentColor;
+  }
+
+  .stateLabel,
+  .connector {
+    border: 1px solid currentColor;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marker,
+  .content,
+  .connectorFill {
+    transition: none;
+  }
+}
