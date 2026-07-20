@@ -76,4 +76,5 @@
   the client module was evaluated in Worker global scope. Keep plugin
   registration behind a browser-only `typeof window !== "undefined"` guard.
   The corrected source passes typecheck, lint, production build, and rendered
-  HTML tests; production redeployment is still pending.
+  HTML tests. Cloudflare build `13d6c181` deployed commit `e936ed8`, and the
+  production homepage was verified with HTTP 200 and a visual browser check.
