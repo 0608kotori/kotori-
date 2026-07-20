@@ -70,3 +70,10 @@
   first-class `typecheck` script; lint, full TypeScript, build, rendered tests,
   and runtime console checks pass. GLB compression remains deferred because no
   verified local optimizer is available and no new dependency was approved.
+- Cloudflare Worker runtime fix (2026-07-20): the first successful Workers
+  build deployed but every request returned Error 1101. Observability traced it
+  to `gsap.registerPlugin(useGSAP, ScrollTrigger)` starting GSAP's timer while
+  the client module was evaluated in Worker global scope. Keep plugin
+  registration behind a browser-only `typeof window !== "undefined"` guard.
+  The corrected source passes typecheck, lint, production build, and rendered
+  HTML tests; production redeployment is still pending.

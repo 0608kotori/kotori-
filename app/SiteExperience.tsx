@@ -17,7 +17,12 @@ import ScrollStack, { ScrollStackItem } from "./ScrollStack";
 import SpecularButton from "./SpecularButton";
 import SpotlightCard from "./SpotlightCard";
 
-gsap.registerPlugin(useGSAP, ScrollTrigger);
+// Client components are also evaluated while the Cloudflare Worker renders the
+// page. Registering ScrollTrigger there starts GSAP's timer in Worker global
+// scope, which Cloudflare rejects before the request handler can run.
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(useGSAP, ScrollTrigger);
+}
 
 const navigation = [
   { href: "#story", label: "故事" },
