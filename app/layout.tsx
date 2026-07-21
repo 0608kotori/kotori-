@@ -4,7 +4,9 @@ import "./globals.css";
 const title = "宇航员 ASTRONAUTS — 学生未来科技探索团队";
 const description =
   "一群年轻人因好奇聚集，用 AI、数字技术与实验，探索科技与人类未来的交汇点。";
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ??
+  "https://future-explorers-website.207188250.workers.dev";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),

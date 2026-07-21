@@ -41,8 +41,9 @@ pnpm dev
 
 Open `http://localhost:3000`.
 
-Set `NEXT_PUBLIC_SITE_URL` to the final HTTPS origin before a public release so
-canonical, Open Graph, robots, and sitemap URLs use the production domain.
+The production metadata defaults to the deployed Workers origin. Set
+`NEXT_PUBLIC_SITE_URL` when using a custom domain or a local environment so
+canonical, Open Graph, robots, and sitemap URLs use the intended origin.
 
 ## Verification
 

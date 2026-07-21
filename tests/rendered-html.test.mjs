@@ -103,6 +103,7 @@ test("keeps accessibility, performance, and starter-cleanup safeguards in source
     page,
     layout,
     sitemap,
+    robots,
     manifest,
     experience,
     orbitImages,
@@ -131,6 +132,7 @@ test("keeps accessibility, performance, and starter-cleanup safeguards in source
     readFile(new URL("../app/page.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/layout.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/sitemap.ts", import.meta.url), "utf8"),
+    readFile(new URL("../app/robots.ts", import.meta.url), "utf8"),
     readFile(new URL("../app/manifest.ts", import.meta.url), "utf8"),
     readFile(new URL("../app/SiteExperience.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/OrbitImages.tsx", import.meta.url), "utf8"),
@@ -166,9 +168,16 @@ test("keeps accessibility, performance, and starter-cleanup safeguards in source
   assert.match(page, /<SiteExperience \/>/);
   assert.match(layout, /lang="zh-CN"/);
   assert.match(layout, /metadataBase/);
+  assert.match(
+    layout,
+    /https:\/\/future-explorers-website\.207188250\.workers\.dev/,
+  );
   assert.match(layout, /summary_large_image/);
   assert.match(layout, /\/og\.png/);
   assert.match(sitemap, /NEXT_PUBLIC_SITE_URL/);
+  assert.doesNotMatch(layout, /http:\/\/localhost:3000/);
+  assert.doesNotMatch(sitemap, /http:\/\/localhost:3000/);
+  assert.doesNotMatch(robots, /http:\/\/localhost:3000/);
   assert.match(manifest, /宇航员 ASTRONAUTS/);
   assert.match(experience, /className="skip-link"/);
   assert.match(experience, /aria-expanded=\{menuOpen\}/);
