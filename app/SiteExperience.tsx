@@ -4,7 +4,7 @@ import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { type CSSProperties, useEffect, useRef, useState } from "react";
 
 import { GalaxyBackground } from "./GalaxyBackground";
 import GradientText from "./GradientText";
@@ -269,6 +269,7 @@ const members = [
     name: "罗天彪",
     role: "队长 · 探索者",
     roleEn: "Team Lead · Explorer",
+    avatarSrc: "/images/members/avatars/luo-tianbiao.png",
     frameBasePath: "/images/members/frames/luo-tianbiao",
     modelSrc: "/models/luo-tianbiao-astronaut.glb",
     accent: "245, 202, 88",
@@ -279,6 +280,7 @@ const members = [
     name: "何欣",
     role: "守护者",
     roleEn: "Guardian",
+    avatarSrc: "/images/members/avatars/he-xin.png",
     frameBasePath: "/images/members/frames/he-xin",
     modelSrc: "/models/he-xin-astronaut-bear.glb",
     accent: "205, 158, 92",
@@ -289,6 +291,7 @@ const members = [
     name: "陈江銮",
     role: "判断者",
     roleEn: "Evaluator",
+    avatarSrc: "/images/members/avatars/chen-jiangluan.png",
     frameBasePath: "/images/members/frames/chen-jiangluan",
     modelSrc: "/models/chen-jiangluan-astronaut.glb",
     accent: "227, 141, 179",
@@ -336,37 +339,37 @@ export function SiteExperience() {
             .from(select(".hero__eyebrow"), {
               autoAlpha: 0,
               y: compact ? 8 : 12,
-              duration: 0.32,
+              duration: 0.22,
             })
             .from(
               select(".hero__title > span"),
               {
                 autoAlpha: 0,
                 y: compact ? 20 : 30,
-                duration: 0.58,
-                stagger: 0.07,
+                duration: 0.38,
+                stagger: 0.05,
               },
-              "-=0.2",
+              "-=0.12",
             )
             .from(
               select(".hero__official-name, .hero__statement, .hero__statement-zh"),
-              { autoAlpha: 0, y: travel * 0.7, duration: 0.38, stagger: 0.04 },
-              "-=0.3",
-            )
-            .from(
-              select(".hero__intro, .hero__intro-zh"),
-              { autoAlpha: 0, y: travel * 0.55, duration: 0.36, stagger: 0.04 },
-              "-=0.25",
-            )
-            .from(
-              select(".hero__actions"),
-              { autoAlpha: 0, y: travel * 0.5, duration: 0.34 },
+              { autoAlpha: 0, y: travel * 0.7, duration: 0.28, stagger: 0.03 },
               "-=0.24",
             )
             .from(
+              select(".hero__intro, .hero__intro-zh"),
+              { autoAlpha: 0, y: travel * 0.55, duration: 0.26, stagger: 0.03 },
+              "-=0.2",
+            )
+            .from(
+              select(".hero__actions"),
+              { autoAlpha: 0, y: travel * 0.5, duration: 0.26 },
+              "-=0.2",
+            )
+            .from(
               select(".hero__footer, .scroll-cue"),
-              { autoAlpha: 0, y: 10, duration: 0.32, stagger: 0.05 },
-              "-=0.22",
+              { autoAlpha: 0, y: 10, duration: 0.24, stagger: 0.04 },
+              "-=0.18",
             );
 
           const reveal = (
@@ -477,7 +480,7 @@ export function SiteExperience() {
 
           reveal(
             "#contact",
-            "#contact > .eyebrow, #contact > h2, #contact > .contact__title-zh, #contact > .contact__lead, #contact > .contact__lead-zh, #contact > .contact-grid, #contact > .contact__note",
+            "#contact > .eyebrow, #contact > h2, #contact > .contact__title-zh, #contact > .contact__lead, #contact > .contact__action, #contact > .contact-grid, #contact > .contact__note",
             0.05,
           );
         },
@@ -881,10 +884,6 @@ export function SiteExperience() {
             </div>
             <p className="section-note">
               技术可以简化确定的部分，但不能掩盖仍需人工判断的边界。
-              <span lang="en">
-                Technology should make the safe part easier without hiding the
-                part that still needs human judgment.
-              </span>
             </p>
           </div>
 
@@ -923,20 +922,12 @@ export function SiteExperience() {
                   <h4>发现 · WHAT WE LEARNED</h4>
                   <p>
                     可安全修正和需要人工复核的项目，必须清楚分开。
-                    <span lang="en">
-                      Safe corrections and manual-review items must remain
-                      visibly separate.
-                    </span>
                   </p>
                 </div>
                 <div>
                   <h4>下一步 · NEXT</h4>
                   <p>
                     继续测试不同模板，让每一处修正边界都更容易检查。
-                    <span lang="en">
-                      Continue testing template variations and make every
-                      correction boundary easier to inspect.
-                    </span>
                   </p>
                 </div>
               </div>
@@ -948,11 +939,11 @@ export function SiteExperience() {
             <OrbitImages
               images={paperFitMedia}
               shape="ellipse"
-              radiusX={340}
-              radiusY={80}
+              radiusX={300}
+              radiusY={68}
               rotation={-8}
               duration={30}
-              itemSize={120}
+              itemSize={92}
               responsive={true}
               radius={160}
               direction="normal"
@@ -982,9 +973,6 @@ export function SiteExperience() {
             </div>
             <p className="section-note">
               这些方向是我们继续追问的坐标，不是已经完成的答案。
-              <span lang="en">
-                Coordinates for inquiry, not finished products.
-              </span>
             </p>
           </div>
 
@@ -1008,7 +996,9 @@ export function SiteExperience() {
           <div className="section-heading">
             <p className="eyebrow">03 — OUR STORY</p>
             <div>
-              <h2 id="story-title">好奇，让我们走到一起。</h2>
+              <h2 id="story-title">
+                好奇，让我们走到<span className="story__title-tail">一起。</span>
+              </h2>
               <p className="section-heading__zh" lang="en">
                 Curiosity brought us here.
               </p>
@@ -1068,20 +1058,16 @@ export function SiteExperience() {
             </div>
             <p className="section-note">
               我们把方法、观察和决定记下来，组成一套仍在生长的知识档案。
-              <span lang="en">
-                Methods, observations, and decisions from a living knowledge
-                system.
-              </span>
             </p>
           </div>
 
           <ScrollStack
             className="knowledge-stack"
-            itemDistance={96}
+            itemDistance={64}
             itemScale={0.03}
-            itemStackDistance={26}
-            stackPosition={112}
-            baseScale={0.94}
+            itemStackDistance={20}
+            stackPosition={104}
+            baseScale={0.96}
             rotationAmount={0}
           >
             {labNotes.map((note) => (
@@ -1164,6 +1150,7 @@ export function SiteExperience() {
                 className="profile"
                 key={member.name}
                 open={activeMember === member.name}
+                style={{ "--member-accent": member.accent } as CSSProperties}
                 onToggle={(event) => {
                   if (event.currentTarget.open) {
                     setActiveMember(member.name);
@@ -1178,10 +1165,10 @@ export function SiteExperience() {
                   <span className="profile__index">{member.index}</span>
                   <span className="profile__portrait" aria-hidden="true">
                     <Image
-                      src={`${member.frameBasePath}/01.webp`}
-                      width={64}
-                      height={64}
-                      sizes="(max-width: 680px) 48px, 56px"
+                      src={member.avatarSrc}
+                      width={384}
+                      height={384}
+                      sizes="(max-width: 680px) 72px, 88px"
                       alt=""
                       unoptimized
                     />
@@ -1211,6 +1198,11 @@ export function SiteExperience() {
                     />
                   ) : null}
                   <div className="profile__record">
+                    <header className="profile__record-heading">
+                      <span>成员档案 · MEMBER PROFILE</span>
+                      <h3>{member.name}</h3>
+                      <p>{member.role}</p>
+                    </header>
                     <dl>
                       <div>
                         <dt>团队角色 · ROLE</dt>
@@ -1266,9 +1258,6 @@ export function SiteExperience() {
               </p>
               <p>
                 每个项目都由团队共同探索。我们从一个问题出发，记录尝试、发现，以及仍未解决的部分。
-              </p>
-              <p lang="en">
-                Every project begins with a question and records what changed.
               </p>
               <div className="projects-stage__action">
                 <SpecularButton
@@ -1339,10 +1328,32 @@ export function SiteExperience() {
           <p className="contact__lead">
             如果你也在关注科技、教育、创造力和未来，欢迎告诉我们：你正在思考什么？
           </p>
-          <p className="contact__lead-zh" lang="en">
-            Questions about technology, education, creativity, or the future
-            are welcome.
-          </p>
+
+          <div className="contact__action">
+            <SpecularButton
+              as="a"
+              href="mailto:207188250@qq.com"
+              size="lg"
+              radius={18}
+              tint="#ffffff"
+              tintOpacity={0}
+              blur={0}
+              textColor="#08080d"
+              lineColor="#ffffff"
+              baseColor="#f5f5f7"
+              intensity={0.9}
+              shineSize={10}
+              shineFade={40}
+              thickness={1}
+              speed={0.35}
+              followMouse
+              proximity={220}
+              autoAnimate={false}
+            >
+              发邮件和我们聊聊 <span aria-hidden="true">↗</span>
+            </SpecularButton>
+            <small lang="en">START A CONVERSATION</small>
+          </div>
 
           <div className="contact-grid" aria-label="宇航员团队联系渠道">
             <div>

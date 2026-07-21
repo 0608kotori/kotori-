@@ -78,3 +78,39 @@
   The corrected source passes typecheck, lint, production build, and rendered
   HTML tests. Cloudflare build `13d6c181` deployed commit `e936ed8`, and the
   production homepage was verified with HTTP 200 and a visual browser check.
+- 3D delivery optimization (2026-07-20): optimize all three member GLBs with
+  glTF Transform using 25% geometry simplification, 0.005 error tolerance,
+  1024px WebP textures, and glTF quantization. Do not use Meshopt with the
+  currently vendored Google model viewer because it has no Meshopt decoder.
+  The models now total about 9.5 MB instead of 49.3 MB and retain their verified
+  appearance. Keep the viewer script and model request behind an explicit
+  `加载 3D 视图` action; the static poster remains the default and fallback.
+  Typecheck, lint, production build, rendered tests, model rendering, and drag
+  rotation QA pass. These changes are local and not yet pushed or deployed.
+- 3D preload revision (2026-07-20): the user explicitly replaced click-to-load
+  with entry-time preloading. Preload the local model-viewer module and all
+  three optimized GLBs from the document head so opening any member record can
+  immediately show an interactive model. Continue mounting only the expanded
+  member's viewer to avoid three simultaneous WebGL canvases. Browser asset
+  inspection verified that the homepage requests the viewer module and all
+  three GLBs on entry; opening a record immediately reached the ready state,
+  exposed no load button, rotated successfully by drag, and logged no errors.
+- Member archive polish (2026-07-20): replace the undersized circular thumbnails
+  with 88px rounded identity badges and dedicated transparent PNG head-and-
+  shoulders crops generated from the verified front frames. Keep each member's
+  restrained accent glow, use a 72px mobile badge, and preserve the original
+  frames as model posters. Expanded records use an editorial model-and-facts
+  layout with aligned labels and values; below 900px it stacks without
+  horizontal overflow. Desktop and narrow browser checks, typecheck, lint,
+  production build, rendered tests, and runtime console checks pass.
+- Final editorial polish (2026-07-20): keep the homepage reveal under one
+  second and use the compact desktop Hero treatment for viewports at or below
+  800px tall. Maintain Chinese-first copy by reserving English for short brand
+  captions and metadata instead of repeating full paragraphs. Use a clear
+  email CTA in Contact, tier secondary section headings below Featured and
+  Exploration, and keep Story, MagicBento, Lab Notes, Projects, and Contact
+  spacing visibly tighter. The PaperFit process orbit uses 92px contained
+  images on a 300px × 68px ellipse; cards must remain clipped inside the orbit
+  frame on desktop and become a 300px horizontal carousel on mobile. Desktop
+  1280×720 and 390×844 visual QA, typecheck, lint, production build, rendered
+  tests, and overflow checks pass. These changes remain local and undeployed.

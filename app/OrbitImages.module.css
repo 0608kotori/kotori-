@@ -10,6 +10,7 @@
 .track {
   position: relative;
   min-height: var(--orbit-stage-height);
+  overflow: clip;
   transform: rotate(var(--orbit-rotation));
 }
 
@@ -82,6 +83,7 @@
   top: 0;
   left: 0;
   width: calc(var(--orbit-item-size) * 1.62);
+  offset-anchor: center;
   offset-path: ellipse(
     var(--orbit-radius-x) var(--orbit-radius-y) at 50% 50%
   );
@@ -126,6 +128,7 @@
 .imageFrame {
   aspect-ratio: 1.62 / 1;
   overflow: hidden;
+  padding: 5px;
   background: #f4f4f6;
 }
 
@@ -133,8 +136,9 @@
   display: block;
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  object-position: top center;
+  object-fit: contain;
+  object-position: center;
+  border-radius: 10px;
 }
 
 .card figcaption {
@@ -173,6 +177,7 @@
 
   .track {
     min-height: 0;
+    overflow: visible;
     transform: none;
   }
 
@@ -201,8 +206,8 @@
     position: relative;
     top: auto;
     left: auto;
-    width: min(82vw, 330px);
-    flex: 0 0 min(82vw, 330px);
+    width: min(78vw, 300px);
+    flex: 0 0 min(78vw, 300px);
     offset-path: none;
     animation: none;
     scroll-snap-align: start;
@@ -217,6 +222,10 @@
     min-height: 48px;
     padding: 12px 14px;
     font-size: 0.62rem;
+  }
+
+  .imageFrame {
+    padding: 4px;
   }
 
   .item:hover .card,

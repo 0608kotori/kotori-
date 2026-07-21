@@ -108,7 +108,7 @@ export default function MemberModel3D({
           src={modelSrc}
           poster={posterSrc}
           alt={`${name}的可旋转宇航员三维模型`}
-          loading="lazy"
+          loading="eager"
           reveal="auto"
           exposure="1.05"
           camera-controls=""
@@ -128,11 +128,15 @@ export default function MemberModel3D({
           touch-action="pan-y"
         />
         <span className={styles.hint}>
-          {status === "ready" ? "左右拖动旋转" : "正在准备模型"}
+          {status === "ready"
+            ? "左右拖动旋转"
+            : status === "error"
+                ? "模型暂不可用"
+                : "正在准备模型"}
         </span>
       </div>
 
-      <footer className={styles.controls}>
+      <footer className={styles.controls} data-active={status === "ready"}>
         <span>←</span>
         <strong>DRAG TO ROTATE</strong>
         <span>→</span>

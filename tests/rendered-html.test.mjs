@@ -61,7 +61,7 @@ test("server-renders the complete ASTRONAUTS experience", async () => {
   assert.match(html, /罗天彪/);
   assert.match(html, /何欣/);
   assert.match(html, /陈江銮/);
-  assert.match(html, /<details class="profile">/);
+  assert.match(html, /<details class="profile"/);
   assert.match(html, /宇航员团队 · 共同完成/);
   assert.match(html, /四个方向，/);
   assert.match(html, /不只储存，<\/span><span>还懂得牵线。/);
@@ -185,7 +185,8 @@ test("keeps accessibility, performance, and starter-cleanup safeguards in source
   assert.match(orbitImages, /unoptimized/);
   assert.match(experience, /<OrbitImages/);
   assert.match(experience, /shape="ellipse"/);
-  assert.match(experience, /radiusX=\{340\}/);
+  assert.match(experience, /radiusX=\{300\}/);
+  assert.match(experience, /itemSize=\{92\}/);
   assert.match(experience, /duration=\{30\}/);
   assert.doesNotMatch(experience, /featured-experiment__gallery/);
   assert.doesNotMatch(experience, /className="featured-experiment__media"/);
@@ -195,6 +196,7 @@ test("keeps accessibility, performance, and starter-cleanup safeguards in source
   assert.match(orbitImages, /prefers-reduced-motion: reduce/);
   assert.match(orbitImages, /saveData/);
   assert.match(orbitImagesCss, /offset-path:\s*ellipse/);
+  assert.match(orbitImagesCss, /object-fit:\s*contain/);
   assert.match(orbitImagesCss, /animation-play-state:\s*paused/);
   assert.match(orbitImagesCss, /@media \(max-width:\s*680px\)/);
   assert.match(orbitImagesCss, /scroll-snap-type:\s*x mandatory/);
@@ -362,8 +364,9 @@ test("keeps accessibility, performance, and starter-cleanup safeguards in source
 });
 
 test("keeps member identity viewers mapped, compact, and accessible", async () => {
-  const [experience, model, loader, modelCss, packageJson] = await Promise.all([
+  const [experience, layout, model, loader, modelCss, packageJson] = await Promise.all([
     readFile(new URL("../app/SiteExperience.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/layout.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/MemberModel3D.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/modelViewerLoader.ts", import.meta.url), "utf8"),
     readFile(new URL("../app/MemberModel3D.module.css", import.meta.url), "utf8"),
@@ -373,6 +376,9 @@ test("keeps member identity viewers mapped, compact, and accessible", async () =
   assert.match(experience, /frames\/luo-tianbiao/);
   assert.match(experience, /frames\/he-xin/);
   assert.match(experience, /frames\/chen-jiangluan/);
+  assert.match(experience, /avatars\/luo-tianbiao\.png/);
+  assert.match(experience, /avatars\/he-xin\.png/);
+  assert.match(experience, /avatars\/chen-jiangluan\.png/);
   assert.match(experience, /luo-tianbiao-astronaut\.glb/);
   assert.match(experience, /he-xin-astronaut-bear\.glb/);
   assert.match(experience, /chen-jiangluan-astronaut\.glb/);
@@ -389,9 +395,16 @@ test("keeps member identity viewers mapped, compact, and accessible", async () =
   assert.match(model, /model\.setAttribute\("src", modelSrc\)/);
   assert.match(model, /camera-controls=""/);
   assert.match(model, /camera-orbit=\{cameraOrbit\}/);
-  assert.match(model, /loading="lazy"/);
+  assert.match(model, /loading="eager"/);
+  assert.doesNotMatch(model, /loadRequested/);
+  assert.doesNotMatch(model, /加载 3D 视图/);
   assert.doesNotMatch(model, /auto-rotate/);
   assert.match(model, /--model-accent/);
+  assert.match(layout, /rel="modulepreload"/);
+  assert.match(layout, /luo-tianbiao-astronaut\.glb/);
+  assert.match(layout, /he-xin-astronaut-bear\.glb/);
+  assert.match(layout, /chen-jiangluan-astronaut\.glb/);
+  assert.match(layout, /type="model\/gltf-binary"/);
   assert.match(loader, /\/vendor\/google-model-viewer\.min\.js/);
   assert.match(loader, /modelViewerPromise/);
   assert.match(loader, /customElements\.whenDefined/);
@@ -400,6 +413,24 @@ test("keeps member identity viewers mapped, compact, and accessible", async () =
   assert.equal(JSON.parse(packageJson).dependencies["@google/model-viewer"], undefined);
 
   await Promise.all([
+    access(
+      new URL(
+        "../public/images/members/avatars/luo-tianbiao.png",
+        import.meta.url,
+      ),
+    ),
+    access(
+      new URL(
+        "../public/images/members/avatars/he-xin.png",
+        import.meta.url,
+      ),
+    ),
+    access(
+      new URL(
+        "../public/images/members/avatars/chen-jiangluan.png",
+        import.meta.url,
+      ),
+    ),
     access(
       new URL(
         "../public/images/members/frames/luo-tianbiao/01.webp",

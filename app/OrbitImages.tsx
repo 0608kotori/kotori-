@@ -154,7 +154,7 @@ export default function OrbitImages({
   const orbitStyle = useMemo<OrbitStyle>(() => {
     const stageHeight = Math.max(
       itemSize * 1.8,
-      geometry.radiusY * 2 + itemSize + 36,
+      geometry.radiusY * 2 + itemSize + 66,
     );
 
     return {
