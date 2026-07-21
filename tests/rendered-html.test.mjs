@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { access, readFile } from "node:fs/promises";
+import { access, readFile, stat } from "node:fs/promises";
 import test from "node:test";
 
 async function render(pathname = "/") {
@@ -373,14 +373,22 @@ test("keeps accessibility, performance, and starter-cleanup safeguards in source
 });
 
 test("keeps member identity viewers mapped, compact, and accessible", async () => {
-  const [experience, layout, model, loader, modelCss, packageJson] = await Promise.all([
-    readFile(new URL("../app/SiteExperience.tsx", import.meta.url), "utf8"),
-    readFile(new URL("../app/layout.tsx", import.meta.url), "utf8"),
-    readFile(new URL("../app/MemberModel3D.tsx", import.meta.url), "utf8"),
-    readFile(new URL("../app/modelViewerLoader.ts", import.meta.url), "utf8"),
-    readFile(new URL("../app/MemberModel3D.module.css", import.meta.url), "utf8"),
-    readFile(new URL("../package.json", import.meta.url), "utf8"),
-  ]);
+  const [experience, layout, model, preloader, loader, modelCss, packageJson] =
+    await Promise.all([
+      readFile(new URL("../app/SiteExperience.tsx", import.meta.url), "utf8"),
+      readFile(new URL("../app/layout.tsx", import.meta.url), "utf8"),
+      readFile(new URL("../app/MemberModel3D.tsx", import.meta.url), "utf8"),
+      readFile(
+        new URL("../app/MemberModelPreloader.tsx", import.meta.url),
+        "utf8",
+      ),
+      readFile(new URL("../app/modelViewerLoader.ts", import.meta.url), "utf8"),
+      readFile(
+        new URL("../app/MemberModel3D.module.css", import.meta.url),
+        "utf8",
+      ),
+      readFile(new URL("../package.json", import.meta.url), "utf8"),
+    ]);
 
   assert.match(experience, /frames\/luo-tianbiao/);
   assert.match(experience, /frames\/he-xin/);
@@ -391,9 +399,14 @@ test("keeps member identity viewers mapped, compact, and accessible", async () =
   assert.match(experience, /luo-tianbiao-astronaut\.glb/);
   assert.match(experience, /he-xin-astronaut-bear\.glb/);
   assert.match(experience, /chen-jiangluan-astronaut\.glb/);
+  assert.match(experience, /mobile\/luo-tianbiao-astronaut\.glb/);
+  assert.match(experience, /mobile\/he-xin-astronaut-bear\.glb/);
+  assert.match(experience, /mobile\/chen-jiangluan-astronaut\.glb/);
   assert.match(experience, /activeMember === member\.name/);
   assert.match(experience, /<MemberModel3D/);
-  assert.match(experience, /key=\{member\.modelSrc\}/);
+  assert.match(experience, /<MemberModelPreloader/);
+  assert.match(experience, /max-width: 820px/);
+  assert.match(experience, /useCompactMemberModels/);
   assert.match(experience, /cameraOrbit: "90deg 75deg 150%"/);
   assert.match(experience, /scheduleHashAlignment/);
   assert.match(experience, /scrollIntoView\(\{ block: "start" \}\)/);
@@ -409,11 +422,15 @@ test("keeps member identity viewers mapped, compact, and accessible", async () =
   assert.doesNotMatch(model, /加载 3D 视图/);
   assert.doesNotMatch(model, /auto-rotate/);
   assert.match(model, /--model-accent/);
-  assert.match(layout, /rel="modulepreload"/);
-  assert.match(layout, /luo-tianbiao-astronaut\.glb/);
-  assert.match(layout, /he-xin-astronaut-bear\.glb/);
-  assert.match(layout, /chen-jiangluan-astronaut\.glb/);
-  assert.match(layout, /type="model\/gltf-binary"/);
+  assert.doesNotMatch(layout, /rel="modulepreload"/);
+  assert.doesNotMatch(layout, /rel="preload"/);
+  assert.doesNotMatch(layout, /\/models\//);
+  assert.match(preloader, /window\.addEventListener\("load", schedule/);
+  assert.match(preloader, /for \(const source of modelSources\)/);
+  assert.match(preloader, /cache: "force-cache"/);
+  assert.match(preloader, /connection\?\.saveData/);
+  assert.match(preloader, /connection\?\.effectiveType === "2g"/);
+  assert.match(preloader, /rootMargin: "1200px 0px"/);
   assert.match(loader, /\/vendor\/google-model-viewer\.min\.js/);
   assert.match(loader, /modelViewerPromise/);
   assert.match(loader, /customElements\.whenDefined/);
@@ -478,9 +495,49 @@ test("keeps member identity viewers mapped, compact, and accessible", async () =
     ),
     access(
       new URL(
+        "../public/models/mobile/luo-tianbiao-astronaut.glb",
+        import.meta.url,
+      ),
+    ),
+    access(
+      new URL(
+        "../public/models/mobile/he-xin-astronaut-bear.glb",
+        import.meta.url,
+      ),
+    ),
+    access(
+      new URL(
+        "../public/models/mobile/chen-jiangluan-astronaut.glb",
+        import.meta.url,
+      ),
+    ),
+    access(
+      new URL(
         "../public/vendor/google-model-viewer.min.js",
         import.meta.url,
       ),
     ),
   ]);
+
+  const compactModels = await Promise.all([
+    stat(
+      new URL(
+        "../public/models/mobile/luo-tianbiao-astronaut.glb",
+        import.meta.url,
+      ),
+    ),
+    stat(
+      new URL(
+        "../public/models/mobile/he-xin-astronaut-bear.glb",
+        import.meta.url,
+      ),
+    ),
+    stat(
+      new URL(
+        "../public/models/mobile/chen-jiangluan-astronaut.glb",
+        import.meta.url,
+      ),
+    ),
+  ]);
+  compactModels.forEach((asset) => assert.ok(asset.size < 1_200_000));
 });

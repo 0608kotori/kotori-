@@ -123,3 +123,13 @@
   protected by rendered-source tests. Typecheck, lint, build, rendered tests,
   the Cloudflare build check, production HTML metadata, and representative
   public assets all pass. Future deployments still require explicit approval.
+- Mobile model delivery revision (2026-07-22): mobile and coarse-pointer
+  devices use compact local GLB variants below 1.2 MB each while desktop keeps
+  the original full-quality models. Do not preload the viewer or GLBs in the
+  document head. After page load, warm the local viewer and models sequentially;
+  approaching Members starts this sooner. Skip background warming for Data
+  Saver, 2G, and slow 2G connections, while opening a profile still loads its
+  selected model with the poster fallback. A 390px browser check confirmed all
+  three compact models become interactive without overflow or console errors.
+  The user approved publishing this verified revision to GitHub and production
+  on 2026-07-22; validate the connected Cloudflare deployment after the push.

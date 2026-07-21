@@ -10,6 +10,7 @@ import { GalaxyBackground } from "./GalaxyBackground";
 import GradientText from "./GradientText";
 import MagicBento from "./MagicBento";
 import MemberModel3D from "./MemberModel3D";
+import MemberModelPreloader from "./MemberModelPreloader";
 import OrbitImages from "./OrbitImages";
 import PillNav from "./PillNav";
 import ResearchStepper, { type ResearchStep } from "./ResearchStepper";
@@ -272,6 +273,7 @@ const members = [
     avatarSrc: "/images/members/avatars/luo-tianbiao.png",
     frameBasePath: "/images/members/frames/luo-tianbiao",
     modelSrc: "/models/luo-tianbiao-astronaut.glb",
+    compactModelSrc: "/models/mobile/luo-tianbiao-astronaut.glb",
     accent: "245, 202, 88",
     cameraOrbit: "90deg 75deg 150%",
   },
@@ -283,6 +285,7 @@ const members = [
     avatarSrc: "/images/members/avatars/he-xin.png",
     frameBasePath: "/images/members/frames/he-xin",
     modelSrc: "/models/he-xin-astronaut-bear.glb",
+    compactModelSrc: "/models/mobile/he-xin-astronaut-bear.glb",
     accent: "205, 158, 92",
     cameraOrbit: "90deg 75deg 150%",
   },
@@ -294,10 +297,16 @@ const members = [
     avatarSrc: "/images/members/avatars/chen-jiangluan.png",
     frameBasePath: "/images/members/frames/chen-jiangluan",
     modelSrc: "/models/chen-jiangluan-astronaut.glb",
+    compactModelSrc: "/models/mobile/chen-jiangluan-astronaut.glb",
     accent: "227, 141, 179",
     cameraOrbit: "90deg 75deg 150%",
   },
 ] as const;
+
+const fullMemberModelSources = members.map((member) => member.modelSrc);
+const compactMemberModelSources = members.map(
+  (member) => member.compactModelSrc,
+);
 
 const heroGradientColors = ["#353049", "#5560dd", "#e38db3"] as const;
 
@@ -306,6 +315,16 @@ export function SiteExperience() {
   const [activeHref, setActiveHref] = useState("#home");
   const [activeMember, setActiveMember] = useState<string | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [useCompactMemberModels, setUseCompactMemberModels] = useState(false);
+
+  useEffect(() => {
+    const media = window.matchMedia("(max-width: 820px), (pointer: coarse)");
+    const update = () => setUseCompactMemberModels(media.matches);
+
+    update();
+    media.addEventListener("change", update);
+    return () => media.removeEventListener("change", update);
+  }, []);
 
   useGSAP(
     () => {
@@ -635,6 +654,14 @@ export function SiteExperience() {
         <div className="cosmos__glow cosmos__glow--blue" />
         <div className="cosmos__grain" />
       </div>
+
+      <MemberModelPreloader
+        modelSources={
+          useCompactMemberModels
+            ? compactMemberModelSources
+            : fullMemberModelSources
+        }
+      />
 
       <header className="site-header">
         <nav className="nav-shell" aria-label="主导航">
@@ -1189,9 +1216,17 @@ export function SiteExperience() {
                 <div className="profile__details profile__details--verified">
                   {activeMember === member.name ? (
                     <MemberModel3D
-                      key={member.modelSrc}
+                      key={
+                        useCompactMemberModels
+                          ? member.compactModelSrc
+                          : member.modelSrc
+                      }
                       name={member.name}
-                      modelSrc={member.modelSrc}
+                      modelSrc={
+                        useCompactMemberModels
+                          ? member.compactModelSrc
+                          : member.modelSrc
+                      }
                       posterSrc={`${member.frameBasePath}/01.webp`}
                       accent={member.accent}
                       cameraOrbit={member.cameraOrbit}
