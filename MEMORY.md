@@ -114,3 +114,12 @@
   frame on desktop and become a 300px horizontal carousel on mobile. Desktop
   1280×720 and 390×844 visual QA, typecheck, lint, production build, rendered
   tests, and overflow checks pass. These changes remain local and undeployed.
+- Production release (2026-07-22): the user explicitly approved updating
+  GitHub and the connected Cloudflare Worker. The member-profile polish,
+  optimized 3D assets, eager model preloads, compact process orbit, and final
+  editorial refinements were pushed to `origin/main`. A production verification
+  then exposed localhost canonical and social metadata; the fallback origin in
+  layout, robots, and sitemap was corrected to the Workers production URL and
+  protected by rendered-source tests. Typecheck, lint, build, rendered tests,
+  the Cloudflare build check, production HTML metadata, and representative
+  public assets all pass. Future deployments still require explicit approval.
